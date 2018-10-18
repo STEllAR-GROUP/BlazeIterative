@@ -57,13 +57,14 @@ void solve_impl(
         DynamicVector<T> &x,
         const MatrixType &A,
         const DynamicVector<T> &b,
-        PreconditionBiCGSTABTag &tag)
+        PreconditionBiCGSTABTag &tag,
+        std::string Preconditioner)
 {
 
     // Decomposition A = K1 * K2
     MatrixType K1;
     MatrixType K2;
-    decomposition<MatrixType,T>("LU",A,K1,K2);
+    decomposition<MatrixType,T>(Preconditioner,A,K1,K2);
     
     // Compute inverse
     auto Kinv = inv(K1*K2);

@@ -19,7 +19,8 @@ void solve_impl(
         DynamicVector<T> &x,
         const MatrixType &A,
         const DynamicVector<T> &b,
-        ConjugateGradientTag &tag)
+        ConjugateGradientTag &tag,
+        std::string Preconditioner="")
 {
 
     BLAZE_INTERNAL_ASSERT(A.isSymmetric(), "A must be a symmetric matrix")

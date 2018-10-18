@@ -22,7 +22,8 @@ void solve_impl(
         DynamicVector<T> &x,
         const MatrixType &A,
         const DynamicVector<T> &b,
-        BiCGSTABTag &tag)
+        BiCGSTABTag &tag,
+        std::string Preconditioner="")
 {
 
     DynamicVector<T> r = b - A * x;
