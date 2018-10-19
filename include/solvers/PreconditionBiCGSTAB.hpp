@@ -13,6 +13,9 @@ ITERATIVE_NAMESPACE_OPEN
 
 namespace detail {
 
+/**
+ *  Implementation of the decompositions provided by blaze
+ */
 template<typename MatrixType, typename T>
 void decomposition(std::string type, const MatrixType &A, MatrixType &K1, MatrixType &K2){
     
@@ -47,11 +50,9 @@ void decomposition(std::string type, const MatrixType &A, MatrixType &K1, Matrix
      
 }    
     
-    
-    
 /**
  *  Implementation of the Preconditioned BiCGSTAB method, following the
- *  preconditioned version on Wikipedia using a LU Decomposition.
+ *  preconditioned version on Wikipedia using various decompositions.
  */
 template<typename MatrixType, typename T>
 void solve_impl(

@@ -88,9 +88,28 @@ DynamicVector<T> solve(const MatrixType &A, const DynamicVector<T> &b, TagType &
     return x;
 };
 
-
+/**
+ * \brief Solver the linear system \f$ Ax = b \f$ using an iterative solver using a preconditioner.
+ *
+ * Top-level entry point to the iterative solver collection.
+ * This method returns a newly-allocated blaze::DynamicVector<T>
+ * by allocating the return vector and calling the solve_inplace
+ * method. All data integrity checking (that can be done independent
+ * of the specific iterative method) is done in the call to solve_inplace.
+ * The initial guess is zeros(length(b),1) (in matlab parlance).
+ * To provide a different initial guess, use the solve_inplace method.
+ *
+ * The specific iterative solver is called via tag dispatch. The tag
+ * holds methods to control logging and convergence criteria as well.
+ * See blaze::iterative::IterativeTag for data members available to
+ * all iterative methods. See the method-specific tag types for
+ * members/methods available only to a particular iterative method.
+ */
 template<typename MatrixType, typename T, typename TagType>
-DynamicVector<T> solve(const MatrixType &A, const DynamicVector<T> &b, TagType &tag, std::string Preconditioner)
+DynamicVector<T> solve(const MatrixType &A, 
+                       const DynamicVector<T> &b, 
+                       TagType &tag, 
+                       std::string Preconditioner)
 {
     DynamicVector<T> x(b.size(), 0.0);
     solve_inplace(x, A, b, tag, Preconditioner);
