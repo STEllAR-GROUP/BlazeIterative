@@ -93,7 +93,6 @@ BLAZE_NAMESPACE_OPEN
                 DynamicVector<T> r(m);
                 DynamicMatrix<T> H(n+1,n,0);
                 DynamicMatrix<T> Q(m,n+1,0);
-                DynamicVector<T> q(m);
                 DynamicVector<T> sn(n,0);
                 DynamicVector<T> cs(n,0);
                 DynamicVector<T> e1(m,0);
@@ -108,7 +107,6 @@ BLAZE_NAMESPACE_OPEN
                 e1[0] = 1;
                 column(Q,0) = r / norm(r);
                 beta = norm(r) * e1;
-                std::cout << beta << std::endl;
 
                 for(int k = 0; k < n; ++k){
                     auto res_1 = arnoldi(A, Q, k);
@@ -116,13 +114,13 @@ BLAZE_NAMESPACE_OPEN
 
                     auto res_2 = apply_givens_rotation(res_1.first, cs, sn, k);
                     submatrix(H, 0, k, k+2, 1) = std::get<0>(res_2);
-                    std::cout << "cs(k): " << std::get<1>(res_2) << std::endl;
-                    std::cout << "sn(k): " << std::get<2>(res_2) << std::endl;
+                    cs[k] = std::get<1>(res_2);
+                    sn[k] = std::get<2>(res_2);
 
                     beta[k+1] = -sn[k] * beta[k];
                     beta[k] = cs[k] * beta[k];
-                    err = abs(beta[k+1]) / norm(b);
 
+                    err = abs(beta[k+1]) / norm(b);
                     err_set[k+1] = err;
 
                     double eps = 1e-8;
@@ -131,10 +129,9 @@ BLAZE_NAMESPACE_OPEN
                     }
 
                 }
-                std::cout << H << std::endl;
+
                 auto H_sub = submatrix(H, 0, 0, n, n);
                 auto beta_sub = subvector(beta, 0, n);
-//                std::cout << H_sub;
                 auto y = inv(H_sub) *  beta_sub;
                 auto Q_sub = submatrix(Q, 0, 0, n, n);
                 x += Q_sub * y;
