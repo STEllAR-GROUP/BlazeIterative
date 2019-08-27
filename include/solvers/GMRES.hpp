@@ -11,7 +11,7 @@
 #include "IterativeCommon.hpp"
 #include "GMRESTag.hpp"
 #include <utility>
-#include "Arnoldi.hpp"
+
 
 BLAZE_NAMESPACE_OPEN
     ITERATIVE_NAMESPACE_OPEN
@@ -96,35 +96,45 @@ BLAZE_NAMESPACE_OPEN
                 DynamicVector<T> q(m);
                 DynamicVector<T> sn(n,0);
                 DynamicVector<T> cs(n,0);
-                DynamicVector<T> e1(n+1,0);
-                DynamicVector<T> beta(n+1);
+                DynamicVector<T> e1(m,0);
+                DynamicVector<T> beta(m);
+                DynamicVector<T> err_set(n+1);
 
 
                 r = b - A * x0;
                 auto err = norm(r) / norm(b);
+                err_set[0] = err;
 
                 e1[0] = 1;
                 column(Q,0) = r / norm(r);
                 beta = norm(r) * e1;
+                std::cout << beta << std::endl;
 
                 for(int k = 0; k < n; ++k){
                     auto res_1 = arnoldi(A, Q, k);
                     column(Q,k+1) = res_1.second;
 
                     auto res_2 = apply_givens_rotation(res_1.first, cs, sn, k);
-                    auto sm = submatrix(H, 0, k, k+2, 1) = std::get<0>(res_2);
+                    submatrix(H, 0, k, k+2, 1) = std::get<0>(res_2);
+                    std::cout << "cs(k): " << std::get<1>(res_2) << std::endl;
+                    std::cout << "sn(k): " << std::get<2>(res_2) << std::endl;
 
                     beta[k+1] = -sn[k] * beta[k];
                     beta[k] = cs[k] * beta[k];
                     err = abs(beta[k+1]) / norm(b);
 
-                    double eps = 1e-12;
-                    if (err <= eps)
+                    err_set[k+1] = err;
+
+                    double eps = 1e-8;
+                    if (err <= eps){
                         break;
+                    }
 
                 }
+                std::cout << H << std::endl;
                 auto H_sub = submatrix(H, 0, 0, n, n);
                 auto beta_sub = subvector(beta, 0, n);
+//                std::cout << H_sub;
                 auto y = inv(H_sub) *  beta_sub;
                 auto Q_sub = submatrix(Q, 0, 0, n, n);
                 x += Q_sub * y;
