@@ -86,7 +86,7 @@ BLAZE_NAMESPACE_OPEN
             {
 
                 BLAZE_INTERNAL_ASSERT(A.isSymmetric(), "A must be a symmetric matrix")
-                
+
                 BLAZE_INTERNAL_ASSERT(n >= 1, "n must larger than or equal to 1")
 
                 // A: m * m matrix; n is max_iteration;
@@ -94,7 +94,7 @@ BLAZE_NAMESPACE_OPEN
 
                 std::size_t m = A.columns();
                 DynamicVector<T> r(m);
-                DynamicMatrix<T> H(n+1,n);
+                DynamicMatrix<T> H(n+1,n,0);
                 DynamicMatrix<T> Q(m,n+1);
                 DynamicVector<T> q(m);
                 DynamicVector<T> sn(n,0);
@@ -112,11 +112,10 @@ BLAZE_NAMESPACE_OPEN
 
                 for(int k = 0; k < n; ++k){
                     auto res_1 = arnoldi(A, Q, k);
-                    column(H,k) = res_1.first;
                     column(Q,k+1) = res_1.second;
 
-                    auto res_2 = apply_givens_rotation(column(H,k), cs, sn, k);
-                    column(H,k) = res_2.first;
+                    auto res_2 = apply_givens_rotation(res_1.first, cs, sn, k);
+                    submatrix(H, 0, k, k+2, 1) = res_2.first;
 
                     beta[k+1] = -sn[k] * beta[k];
                     beta[k] = cs[k] * beta[k];
