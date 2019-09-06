@@ -1,2 +1,2 @@
-add_executable(blz_iter_test main.cpp)
-target_link_libraries(blz_iter_test PRIVATE BlazeIterative)
+add_executable(test_arnoldi main_Arnoldi.cpp)
+target_link_libraries(test_arnoldi PRIVATE BlazeIterative)
