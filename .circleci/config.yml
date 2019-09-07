@@ -16,7 +16,7 @@ jobs:
                 command: sudo dnf update -y 
             - run:
                 name: Install
-                command: sudo dnf install cmake g++ 
+                command: sudo dnf install cmake g++ -y
             - run:
                 name: Build
                 command: |
