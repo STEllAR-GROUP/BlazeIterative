@@ -12,6 +12,12 @@ jobs:
         steps:
             - checkout
             - run:
+                name: Update
+                command: sudo dnf updaye -y 
+            - run:
+                name: Install
+                command: sudo dnf install cmake g++ 
+            - run:
                 name: Build
                 command: |
                   mkdir build 
