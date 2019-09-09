@@ -31,7 +31,7 @@ int main() {
 
     auto error = norm(x1 - x2);
 
-    if (error < epsilon){
+    if (error < EPSILON){
         std::cout << " Pass test of BiCGSTAB" << std::endl;
         return EXIT_SUCCESS;
     } else{

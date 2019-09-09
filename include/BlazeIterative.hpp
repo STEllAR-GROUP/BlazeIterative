@@ -12,6 +12,6 @@
 
 #include "solvers/solvers.hpp"
 
-#define epsilon 1.0e-8
+#define EPSILON 1.0e-8
 
 #endif //BLAZE_ITERATIVE_BLAZEITERATIVE_HPP

@@ -36,7 +36,7 @@ int main() {
 
     auto error = real(norm(w1 - w2));
 
-    if (error < epsilon){
+    if (error < EPSILON){
         std::cout << " Pass test of Lanczos" << std::endl;
         return EXIT_SUCCESS;
     } else{
