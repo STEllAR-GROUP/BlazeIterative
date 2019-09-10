@@ -70,7 +70,7 @@ int main() {
 //    std::cout << solve(A,b,x0,tag,n) << std::endl << std::endl;
 
 
-    // Test For PreconditionBiCGSTABL
+    // Test For BiCGSTABL
     std::size_t N = 5;
     DynamicMatrix<double,false> A(N,N);
     DynamicVector<double> b(N);

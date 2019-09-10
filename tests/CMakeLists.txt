@@ -18,3 +18,6 @@ target_link_libraries(test_bicgstab PRIVATE BlazeIterative)
 
 add_executable(test_preconditionedbicgstab main_PreconditionedBiCGSTAB.cpp)
 target_link_libraries(test_preconditionedbicgstab PRIVATE BlazeIterative)
+
+add_executable(test_bicgstabl main_BiCGSTABL.cpp)
+target_link_libraries(test_bicgstabl PRIVATE BlazeIterative)
