@@ -9,7 +9,6 @@
 #define BLAZE_ITERATIVE_PRECONDITIONCG_HPP
 
 #include "PreconditionCGTag.hpp"
-#include <iostream>
 
 BLAZE_NAMESPACE_OPEN
 ITERATIVE_NAMESPACE_OPEN
