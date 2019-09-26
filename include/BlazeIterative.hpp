@@ -7,6 +7,8 @@
 #ifndef BLAZE_ITERATIVE_BLAZEITERATIVE_HPP
 #define BLAZE_ITERATIVE_BLAZEITERATIVE_HPP
 
+
+#define BLAZE_USER_ASSERTION 1
 #include "IterativeCommon.hpp"
 #include "IterativeTag.hpp"
 #include "solve.hpp"
@@ -15,6 +17,7 @@
 
 
 #define EPSILON 1.0e-8
+
 
 
 #endif //BLAZE_ITERATIVE_BLAZEITERATIVE_HPP

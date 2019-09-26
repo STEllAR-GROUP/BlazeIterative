@@ -55,7 +55,7 @@ public:
 
 protected:
     std::size_t maximum_iterations{20};
-    double relative_residual_tolerance{1.0e-6};
+    double relative_residual_tolerance{1.0e-10};
     double absolute_residual_tolerance{0.0};
     std::string solverName{"Default"};
     TerminationStatus terminationStatus{TerminationStatus::NOT_TERMINATED};
