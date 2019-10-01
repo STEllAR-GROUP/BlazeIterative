@@ -101,6 +101,10 @@ ITERATIVE_NAMESPACE_OPEN
 
             BLAZE_INTERNAL_ASSERT(isSymmetric(A), "A must be a symmetric matrix")
 
+            MatrixType L_pos;
+            llh( A, L_pos);
+            BLAZE_USER_ASSERT(A == L_pos* ctrans(L_pos), "A must be a positive definite matrix")
+
             MatrixType M;
             preconditioner_matrix<MatrixType, T>(Preconditioner,A,M);
 
