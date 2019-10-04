@@ -19,9 +19,7 @@ BLAZE_NAMESPACE_OPEN
 
             template<typename MatrixType, typename T>
             void  solve_impl(
-                    DynamicVector<T> &x,
-//                    MatrixType &h,
-//                    MatrixType &Q,
+                    DynamicVector<complex<T>> &x,
                     const MatrixType &A,
                     const DynamicVector<T> &b,
                     LanczosTag &tag,
@@ -52,7 +50,6 @@ BLAZE_NAMESPACE_OPEN
                 DynamicVector<T> Av(m);
                 DynamicMatrix<T> Q(m, n);
                 DynamicMatrix<T> h(n, n);
-                DynamicMatrix<T,rowMajor> V(n,n);
 
 
              // with an example of a diagonal matrix A
@@ -82,7 +79,7 @@ BLAZE_NAMESPACE_OPEN
                 band<1>(h) = beta_1;
                 band<-1>(h) = beta_1;
 
-                eigen(h, x, V);
+                eigen(h, x);
 
             }; // end solve_imple function
 

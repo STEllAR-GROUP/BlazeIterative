@@ -64,31 +64,10 @@ void solve_inplace(DynamicVector<T> &x,
     detail::solve_impl(x, A, b, tag,Preconditioner);
 };
 
-// For BiCGSTABL
-    template<typename MatrixType, typename T, typename TagType>
-    void solve_inplace(DynamicVector<T> &x,
-                       const MatrixType &A,
-                       const DynamicVector<T> &b,
-                       const std::size_t &l,
-                       TagType &tag)
-    {
-        //Compile-time assertions
-        BLAZE_CONSTRAINT_MUST_BE_MATRIX_TYPE(MatrixType);
-        static_assert(std::is_same<T, typename MatrixType::ElementType>::value,
-                      "Matrix and vector data types must be the same");
-
-        //Run-time assertions checking conditions that would be problems later anyway
-        assert(A.columns() == b.size() && "A and b must have consistent dimensions");
-        assert(x.size() == b.size() && "x and b must be the same length");
-        assert(A.rows() == A.columns() && "A must be a square matrix");
-
-        // Call specific solver
-        detail::solve_impl(x, A, b, l, tag);
-    };
-
+    // For Arnoldi
     // Lanczos
     template<typename MatrixType, typename T, typename TagType>
-    void solve_inplace(DynamicVector<T> &x,
+    void solve_inplace(DynamicVector<complex<T>> &x,
                        const MatrixType &A,
                        const DynamicVector<T> &b,
                        TagType &tag,
@@ -103,34 +82,10 @@ void solve_inplace(DynamicVector<T> &x,
         assert(A.columns() == b.size() && "A and b must have consistent dimensions");
         assert(x.size() == b.size() && "x and b must be the same length");
         assert(isSymmetric(A) && "A must be a symmetric matrix");
-
-        // Call specific solver
-        detail::solve_impl(x, A, b, tag, n);
-    };
-
-// For Arnoldi
-
-// Solve for eigenvalues
-    template<typename MatrixType, typename T, typename TagType>
-    void solve_inplace(MatrixType &h,
-                       MatrixType &Q,
-                       const MatrixType &A,
-                       const DynamicVector<T> &b,
-                       TagType &tag,
-                       const std::size_t &n)
-    {
-        //Compile-time assertions
-        BLAZE_CONSTRAINT_MUST_BE_MATRIX_TYPE(MatrixType);
-        static_assert(std::is_same<T, typename MatrixType::ElementType>::value,
-                      "Matrix and vector data types must be the same");
-
-        //Run-time assertions checking conditions that would be problems later anyway
-        assert(A.columns() == b.size() && "A and b must have consistent dimensions");
-        assert(A.rows() == A.columns() && "A must be a square matrix");
         assert(n >= 1 && "n must be larger than or equal to 1");
 
         // Call specific solver
-        detail::solve_impl(h,Q,A, b, tag, n);
+        detail::solve_impl(x, A, b, tag, n);
     };
 
 // For GMRES
@@ -212,38 +167,23 @@ DynamicVector<T> solve(const MatrixType &A,
 };
 
 
-
-    // For Lanczos
+// For Arnoldi
+// For Lanczos
     template<typename MatrixType, typename T, typename TagType>
-    DynamicVector<T> solve(const MatrixType &A, const DynamicVector<T> &b, TagType &tag, const std::size_t &n)
+    DynamicVector<complex<T>> solve(const MatrixType &A, const DynamicVector<T> &b, TagType &tag, const std::size_t &n)
     {
-        DynamicVector<T> x(n, 0.0);
-        solve_inplace(x, A, b, tag, n);
+        if(typeid(tag) == typeid(ArnoldiTag)){
+            DynamicVector<complex<T>> x(n, 0.0);
+            solve_inplace(x, A, b, tag, n);
+            return x;
 
-        return x;
+        } else if(typeid(tag) == typeid(LanczosTag)) {
+            DynamicVector<complex<T>> x(n, 0.0);
+            solve_inplace(x, A, b, tag, n);
+            return x;
+        }
+
     };
-
-//    // For Arnoldi
-//    template<typename MatrixType, typename T, typename TagType>
-//    std::pair<MatrixType, MatrixType> solve(const MatrixType &A, const DynamicVector<T> &b, TagType &tag,const std::size_t &n)
-//    {
-//        if(typeid(tag) == typeid(ArnoldiTag)){
-//            MatrixType Q(b.size(), (n + 1));
-//            MatrixType h((n + 1), n);
-//            solve_inplace(h, Q, A, b, tag, n);
-//
-//            return std::make_pair(Q,h);
-//
-//        } else if(typeid(tag) == typeid(LanczosTag)) {
-//            MatrixType Q(A.columns() , n);
-//            MatrixType h(n, n, 0.0);
-//            solve_inplace(h, Q,A , b, tag, n);
-//
-//            return std::make_pair(Q,h);
-//        }
-//
-//
-//    };
 
     // For GMRES
     template<typename MatrixType, typename T, typename TagType>
@@ -251,19 +191,6 @@ DynamicVector<T> solve(const MatrixType &A,
     {
         DynamicVector<T> x(b.size(), 0.0);
         solve_inplace(x, A, b, x0, tag, n);
-
-        return x;
-    };
-
-    // For BiCGSTABL
-    template<typename MatrixType, typename T, typename TagType>
-    DynamicVector<T> solve(const MatrixType &A,
-                           const DynamicVector<T> &b,
-                           const std::size_t &l,
-                           TagType &tag)
-    {
-        DynamicVector<T> x(b.size(), 0.0);
-        solve_inplace(x, A, b, l, tag);
 
         return x;
     };
