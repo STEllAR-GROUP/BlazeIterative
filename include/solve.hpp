@@ -68,7 +68,7 @@ void solve_inplace(DynamicVector<T> &x,
     // Lanczos
     template<typename MatrixType, typename T, typename TagType>
     void solve_inplace(DynamicVector<T> &x,
-                       const SymmetricMatrix<MatrixType> &A,
+                       const MatrixType &A,
                        const DynamicVector<T> &b,
                        TagType &tag,
                        const std::size_t &n)
@@ -169,7 +169,7 @@ DynamicVector<T> solve(const MatrixType &A,
 // For Arnoldi
 // For Lanczos
     template<typename MatrixType, typename T, typename TagType>
-    DynamicVector<T> solve(const SymmetricMatrix<MatrixType> &A, const DynamicVector<T> &b, TagType &tag, const std::size_t &n)
+    DynamicVector<T> solve(const MatrixType &A, const DynamicVector<T> &b, TagType &tag, const std::size_t &n)
     {
         if(typeid(tag) == typeid(ArnoldiTag)){
             DynamicVector<T> x(n, 0.0);

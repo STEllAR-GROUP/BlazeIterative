@@ -19,7 +19,7 @@ BLAZE_NAMESPACE_OPEN
             template<typename MatrixType, typename T>
             void  solve_impl(
                     DynamicVector<T> &x,
-                    const  SymmetricMatrix<MatrixType> &A,
+                    const  MatrixType &A,
                     const DynamicVector<T> &b,
                     LanczosTag &tag,
                     const std::size_t &n
