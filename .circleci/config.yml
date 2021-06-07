@@ -10,13 +10,16 @@ jobs:
         docker:
             - image: fedora:33
         steps:
+            - run: 
+              name: Install git
+              command: sudo dnf install git -y 
             - checkout
             - run:
                 name: Update
                 command: sudo dnf update -y 
             - run:
                 name: Install
-                command: sudo dnf install make automake cmake g++ blaze-devel git -y
+                command: sudo dnf install make automake cmake g++ blaze-devel  -y
             - run:
                 name: Build
                 command: |
