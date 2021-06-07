@@ -8,7 +8,7 @@ version: 2
 jobs:
     build:
         docker:
-            - image: fedora:30
+            - image: fedora:33
         steps:
             - checkout
             - run:
