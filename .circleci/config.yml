@@ -11,8 +11,8 @@ jobs:
             - image: fedora:33
         steps:
             - run: 
-              name: Install git
-              command: sudo dnf install git -y 
+                name: Install git
+                command: sudo dnf install git -y 
             - checkout
             - run:
                 name: Update
